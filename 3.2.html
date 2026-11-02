@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actividad 3.3 - Juego de Craps con Apuestas</title>
+    <style>
+        body {
+            /* Estilo solicitado: fuente Impact y fondo celeste */
+            font-family: Impact, sans-serif;
+            background-color: #87CEFA;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #tablero {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 3px solid #000;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+        }
+        .marcador {
+            font-size: 1.3em;
+            margin: 15px 0;
+            font-family: Arial, sans-serif; /* Se mantiene Arial para legibilidad de textos pequeños */
+        }
+        .charlas {
+            font-style: italic;
+            color: #0056b3;
+            margin: 15px 0;
+            font-size: 1.2em;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1.2em;
+            font-family: Impact, sans-serif;
+            background-color: #ff4500;
+            color: white;
+            border: 2px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #cc3700;
+        }
+        button:disabled {
+            background-color: #555;
+            color: #999;
+            cursor: not-allowed;
+            border-color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="tablero">
+        <h1>JUEGO DE CRAPS</h1>
+        <div class="marcador" id="displaySaldo">Saldo en el Banco: $1000</div>
+        
+        <button id="btnJugar" onclick="jugarCraps()">Lanzar Dados</button>
+        
+        <div class="marcador" id="displayDados"></div>
+        <div class="marcador" id="displayEstado">¡Presione el botón para iniciar!</div>
+        <div class="charlas" id="displayConversacion"></div>
+    </div>
+
+    <script>
+        // Variables globales del juego
+        var saldoBanco = 1000;
+        var estadoJuego = 0; // 0 = Nuevo juego/Apuesta pendiente, 1 = Buscando el Punto
+        var punto = 0;
+        var apuestaActual = 0;
+
+        // Función principal del juego
+        function jugarCraps() {
+            if (saldoBanco <= 0) {
+                document.getElementById("displayEstado").innerHTML = "¡Lo siento. Está en bancarrota!";
+                return;
+            }
+
+            // Si es un juego nuevo, solicitar y validar la apuesta
+            if (estadoJuego === 0) {
+                var entradaValida = false;
+                
+                do {
+                    var entrada = prompt("Su saldo actual es $" + saldoBanco + ".\nIntroduzca su apuesta:", "100");
+                    
+                    // Si el usuario cancela el prompt, salir de la función
+                    if (entrada === null) return; 
+                    
+                    apuestaActual = parseInt(entrada);
+                    
+                    // Validar que sea número, mayor a 0 y menor o igual al saldo
+                    if (!isNaN(apuestaActual) && apuestaActual > 0 && apuestaActual <= saldoBanco) {
+                        entradaValida = true;
+                    } else {
+                        alert("Apuesta inválida. Debe ser un número mayor a 0 y no exceder su saldo de $" + saldoBanco + ".");
+                    }
+                } while (!entradaValida);
+            }
+
+            // Lanzar los dados
+            var sumaDados = lanzarDados();
+
+            // Lógica del Craps
+            if (estadoJuego === 0) {
+                // Primer lanzamiento
+                if (sumaDados === 7 || sumaDados === 11) {
+                    procesarVictoria();
+                } else if (sumaDados === 2 || sumaDados === 3 || sumaDados === 12) {
+                    procesarDerrota();
+                } else {
+                    // Se establece el punto
+                    estadoJuego = 1;
+                    punto = sumaDados;
+                    document.getElementById("displayEstado").innerHTML = "El Punto es <strong>" + punto + "</strong>. Siga lanzando.";
+                    actualizarConversacion();
+                }
+            } else {
+                // Lanzamientos subsecuentes buscando el punto
+                if (sumaDados === punto) {
+                    procesarVictoria();
+                } else if (sumaDados === 7) {
+                    procesarDerrota();
+                } else {
+                    document.getElementById("displayEstado").innerHTML = "Buscando el Punto (<strong>" + punto + "</strong>)...";
+                    actualizar

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actividad 3.4 - Generador de Cadenas</title>
+    <style>
+        body {
+            font-family: Impact, sans-serif;
+            background-color: #87CEFA;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            font-size: 1.2em;
+            font-family: Impact, sans-serif;
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadenas de Tres Letras</h1>
+    <p>Las posibles combinaciones derivadas de su palabra se muestran en el cuadro de texto.</p>
+    
+    <textarea id="resultado" readonly></textarea>
+
+    <script>
+        function procesarPalabra() {
+            var palabra = "";
+            var entradaValida = false;
+
+            do {
+                palabra = prompt("Ingrese una palabra de exactamente 5 letras (ej. trigo):", "trigo");
+                
+                if (palabra === null) return; 
+                
+                if (palabra.length === 5) {
+                    entradaValida = true;
+                } else {
+                    alert("La palabra debe contener exactamente cinco letras.");
+                }
+            } while (!entradaValida);
+
+            var arregloCadenas = [];
+            var letras = palabra.split("");
+
+            for (var i = 0; i < 5; i++) {
+                for (var j = 0; j < 5; j++) {
+                    if (i === j) continue; 
+                    
+                    for (var k = 0; k < 5; k++) {
+                        if (i === k || j === k) continue; 
+                        
+                        var nuevaCadena = letras[i] + letras[j] + letras[k];
+                        
+                        if (arregloCadenas.indexOf(nuevaCadena) === -1) {
+                            arregloCadenas.push(nuevaCadena);
+                        }
+                    }
+                }
+            }
+
+            var textoSalida = "Palabra original: " + palabra.toUpperCase() + "\n";
+            textoSalida += "Total de combinaciones únicas generadas: " + arregloCadenas.length + "\n\n";
+            textoSalida += arregloCadenas.join(", ");
+
+            document.getElementById("resultado").value = textoSalida;
+        }
+
+        window.onload = procesarPalabra;
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actividad 3.1 - Cifrado de Datos</title>
+    <script>
+        // Función principal que se ejecuta al cargar la página
+        function iniciarCifrado() {
+            // 1. Obtener la entrada del usuario mediante un diálogo prompt
+            var entrada = prompt("Ingrese el dato de 4 dígitos a transmitir:", "0000");
+
+            // Validar que se haya ingresado algo y que tenga exactamente 4 caracteres
+            if (entrada !== null && entrada.length === 4 && !isNaN(entrada)) {
+                
+                // 2. Extraer cada dígito y convertirlo a número entero
+                var digito1 = parseInt(entrada.charAt(0));
+                var digito2 = parseInt(entrada.charAt(1));
+                var digito3 = parseInt(entrada.charAt(2));
+                var digito4 = parseInt(entrada.charAt(3));
+
+                // 3. Reemplazar cada dígito con (suma del dígito + 7) módulo 10
+                digito1 = (digito1 + 7) % 10;
+                digito2 = (digito2 + 7) % 10;
+                digito3 = (digito3 + 7) % 10;
+                digito4 = (digito4 + 7) % 10;
+
+                // 4. Intercambiar el primer dígito con el tercero
+                var temp1 = digito1;
+                digito1 = digito3;
+                digito3 = temp1;
+
+                // 5. Intercambiar el segundo dígito con el cuarto
+                var temp2 = digito2;
+                digito2 = digito4;
+                digito4 = temp2;
+
+                // 6. Producir texto HTML5 que muestre el entero cifrado
+                document.writeln("<h1>Resultado del Cifrado</h1>");
+                document.writeln("<p>Dato original: <strong>" + entrada + "</strong></p>");
+                document.writeln("<p>Dato cifrado de forma segura: <strong>" + digito1 + digito2 + digito3 + digito4 + "</strong></p>");
+            } else {
+                // Manejo de error si el usuario no ingresa 4 dígitos
+                document.writeln("<h1>Error</h1>");
+                document.writeln("<p>Por favor, recargue la página e ingrese un número entero válido de exactamente cuatro dígitos.</p>");
+            }
+        }
+    </script>
+</head>
+<body onload="iniciarCifrado()">
+    <!-- El script se ejecuta automáticamente al cargar el body -->
+</body>
+</html>
